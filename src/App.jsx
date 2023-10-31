@@ -1,13 +1,12 @@
 import React from 'react';
-import Header from './components/Header.jsx'
+import Header from './components/Header.jsx';
 
 function App() {
 
   return (
-    <>
+    <div className='font-atkinson'>
       <Header />
-      <h1>Hello</h1>
-    </>
+    </div>
   )
 }
 
