@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
-import { pdfjs } from 'react-pdf';
+import "react-pdf/dist/esm/Page/TextLayer.css";
+
 
 const FileUpload = () => {
 
@@ -57,12 +58,17 @@ const FileUpload = () => {
             {/* ............ Display pdf here ......... */}
             <div>
                 {pdfData && (
-                    <Document file={pdfData}
-                    onLoadSuccess={onDocumentLoadSuccess}
+                    <Document 
+                        file={pdfData}
+                        onLoadSuccess={onDocumentLoadSuccess}
                     >
-                        {/* {Array.from(new Array(numPages),(el, index) => (
-                           
-                        ))} */}
+                        {Array.from(new Array(numPages),(el, index) => (
+                            <div key={`serial_${index + 1}`}>
+                            <input type="checkbox" />
+                            <Page key={`page_${index + 1}`} pageNumber={index + 1}  renderAnnotationLayer={false} renderTextLayer={false} />
+                            </div>
+                          )
+                         )}
                     </Document>
                 )}
             </div>
