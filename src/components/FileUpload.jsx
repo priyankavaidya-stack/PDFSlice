@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
 import "react-pdf/dist/esm/Page/TextLayer.css";
+import { RiDeleteBin6Line } from 'react-icons/ri'
 
 
 const FileUpload = () => {
@@ -61,26 +62,34 @@ const FileUpload = () => {
                     <input className='hidden' type="file" accept='.pdf' title="Upload" name="file" ref={fileInputRef} onChange={ onFileInputChange } />
             </div>
             {/* ............ Display pdf here ......... */}
-            <div className="flex flex-wrap">
+            <div className="flex flex-wrap container justify-center items-center bg-[#EEE]">
                 {pdfData ?  (
 
                    
                     <Document 
                         file={pdfData}
                         onLoadSuccess={onDocumentLoadSuccess}
-                        className="grid xl:grid-cols-12 min-[991px]:grid-cols-12 grid-cols-12 mt-3 gap-4"
+                        className="grid xl:grid-cols-12 min-[991px]:grid-cols-12 grid-cols-12 mt-3"
                     >
                         {Array.from(new Array(numPages),(el, index) => (
                             <div 
                                 key={`serial_${index + 1}`}
-                                className="p-3 max-[768px]:col-span-12 min-[768px]:col-span-4 min-[1300px]:col-span-3 mx-3">
+                                className="p-3 max-[768px]:col-span-6 min-[768px]:col-span-3 min-[1300px]:col-span-2 hover:bg-[#DDDDDD] relative">
                                 <input type="checkbox" />{index + 1}
                                 <Page 
                                     key={`page_${index + 1}`}
                                     pageNumber={index + 1}
                                     renderAnnotationLayer={false}
                                     renderTextLayer={false}
-                                    width={200} />
+                                    width={150}
+                                    className="shadow-custom"
+                                />
+                                <div className="bg-white absolute bottom-5 w-[85%] h-20 flex justify-center items-center">
+                                    <button className="text-[#00cc99] border border-[#00cc99] flex justify-center opacity-20 py-2 px-4 hover:opacity-100 hover:bg-[#00cc99] hover:text-white">
+                                        <RiDeleteBin6Line size={25} className="mr-2" />
+                                        <span>Delete</span>
+                                    </button>
+                                </div>
                             </div>
                           )
                          )}
