@@ -74,21 +74,24 @@ const FileUpload = () => {
                         {Array.from(new Array(numPages),(el, index) => (
                             <div 
                                 key={`serial_${index + 1}`}
-                                className="p-3 max-[768px]:col-span-6 min-[768px]:col-span-3 min-[1300px]:col-span-2 hover:bg-[#DDDDDD] relative">
-                                <input type="checkbox" />{index + 1}
+                                className="p-4 pb-8 mb-4 max-[768px]:col-span-6 max-[370px]:col-span-12 min-[768px]:col-span-3 min-[1300px]:col-span-2 hover:bg-[#DDDDDD] relative">
                                 <Page 
                                     key={`page_${index + 1}`}
                                     pageNumber={index + 1}
                                     renderAnnotationLayer={false}
                                     renderTextLayer={false}
-                                    width={150}
+                                    width={140}
                                     className="shadow-custom"
                                 />
-                                <div className="bg-white absolute bottom-5 w-[85%] h-20 flex justify-center items-center">
-                                    <button className="text-[#00cc99] border border-[#00cc99] flex justify-center opacity-20 py-2 px-4 hover:opacity-100 hover:bg-[#00cc99] hover:text-white">
-                                        <RiDeleteBin6Line size={25} className="mr-2" />
+                                <div className="bg-white absolute bottom-5 w-[140px] h-20 flex justify-center items-center">
+                                    <button className="text-[#00cc99] rounded border border-[#00cc99] flex justify-center opacity-30 py-2 px-4 hover:opacity-100 hover:bg-[#00cc99] hover:text-white">
+                                        <RiDeleteBin6Line size={23} className="mr-2" />
                                         <span>Delete</span>
                                     </button>
+                                </div>
+                                <div className="flex flex-row absolute bottom-[-10px] w-[130px] justify-center items-center">
+                                    <input type="checkbox" className="" />
+                                    <label>{index + 1}</label>
                                 </div>
                             </div>
                           )
