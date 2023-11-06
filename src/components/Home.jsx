@@ -1,7 +1,7 @@
 import React from 'react';
 import PolkaLeft from '../images/PolkaLeft.png';
 import PolkaRight from '../images/PolkaRight.png';
-import FileUpload from './FileUpload';
+import DeletePage from './FileUpload';
 
 
 const Home = () => {
@@ -20,7 +20,7 @@ const Home = () => {
                 </div>
                 <input className='hidden' type="file" accept='.pdf' title="Upload" name="file" ref={fileInputRef} onChange={ onFileInputChange } />
             </div> */}
-            <FileUpload />
+            <DeletePage />
         </div>
     </div>
   )

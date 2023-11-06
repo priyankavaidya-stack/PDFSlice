@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
 import "react-pdf/dist/esm/Page/TextLayer.css";
-import { RiDeleteBin6Line } from 'react-icons/ri'
+import { RiDeleteBin6Line } from 'react-icons/ri';
 
 
-const FileUpload = () => {
+const DeletePage = () => {
 
     const [numPages, setNumPages] = useState(null);
     const [pdfData, setPdfData] = useState(null);
@@ -106,4 +106,4 @@ const FileUpload = () => {
     )
 }
 
-export default FileUpload
+export default DeletePage;
