@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
 import "react-pdf/dist/esm/Page/TextLayer.css";
 import { RiDeleteBin6Line } from 'react-icons/ri';
+import { PDFDocument } from 'pdf-lib';
 
 
 const DeletePage = () => {
@@ -17,6 +18,7 @@ const DeletePage = () => {
         }
         // console.log(storedPDFData);
     }, [pdfData]);
+
 
     const onDocumentLoadSuccess = ({ numPages }) => {
         setNumPages(numPages);
@@ -52,11 +54,30 @@ const DeletePage = () => {
         }
     };
 
+    // To delete single page in pdf
+    const handleDeletePage = (pageIndex) => {
+        console.log(pageIndex);
+    
+        if(pdfData) {
+            const pdfBytes = atob(pdfData.split(',')[1]);
+            const pdfDoc = PDFDocument.load(pdfBytes);
+            console.log(pageIndex);
+            // Delete the specified page
+            pdfDoc.removePage(pageIndex);
+
+            // Save the modified PDF
+            const modifiedPdfData = pdfDoc.save();
+            const modifiedPdfDataUri = `data:application/pdf;base64,${Buffer.from(modifiedPdfData).toString('base64')}`;
+            localStorage.setItem('pdfData', modifiedPdfDataUri);
+            setPdfData(modifiedPdfDataUri);
+        }
+    }
+
 
     return (
         <>
             <div className='mt-[40px] mb-10 py-2 px-4 w-fit font-bold rounded-[4px] bg-[#00cc99]'>
-                    <div className='btn btn-medium text-white text-lg cursor-pointer' onClick={handleInputClick}>Edit a PDF document 
+                    <div className='btn btn-medium text-white text-lg cursor-pointer' onClick={ handleInputClick }>Edit a PDF document 
                         <span className='font-normal'> - it's free</span>
                     </div>
                     <input className='hidden' type="file" accept='.pdf' title="Upload" name="file" ref={fileInputRef} onChange={ onFileInputChange } />
@@ -64,7 +85,6 @@ const DeletePage = () => {
             {/* ............ Display pdf here ......... */}
             <div className="flex flex-wrap container justify-center items-center bg-[#EEE]">
                 {pdfData ?  (
-
                    
                     <Document 
                         file={pdfData}
@@ -85,7 +105,12 @@ const DeletePage = () => {
                                     className="shadow-custom"
                                 />
                                 <div className="bg-white absolute bottom-6 w-[140px] h-20 flex justify-center items-center">
-                                    <button className="text-[#00cc99] rounded border border-[#00cc99] flex justify-center opacity-30 py-2 px-4 hover:opacity-100 hover:bg-[#00cc99] hover:text-white">
+                                    <button 
+                                        className="text-[#00cc99] rounded border border-[#00cc99] flex justify-center opacity-30 py-2 px-4 hover:opacity-100 hover:bg-[#00cc99] hover:text-white"
+                                    onClick={()=>{
+                                        console.log("hiii")
+                                    }}
+                                    >
                                         <RiDeleteBin6Line size={23} className="mr-2" />
                                         <span>Delete</span>
                                     </button>

@@ -1,7 +1,7 @@
 import React from 'react';
 import PolkaLeft from '../images/PolkaLeft.png';
 import PolkaRight from '../images/PolkaRight.png';
-import DeletePage from './FileUpload';
+import DeletePage from './DeletePage.jsx';
 
 
 const Home = () => {
