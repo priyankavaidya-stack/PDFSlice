@@ -55,24 +55,25 @@ const DeletePage = () => {
     };
 
     // To delete single page in pdf
-    const handleDeletePage = (pageIndex) => {
-        console.log(pageIndex);
+    const handleDeletePage = async (pageIndex) => {
     
-        if(pdfData) {
-            const pdfBytes = atob(pdfData.split(',')[1]);
-            const pdfDoc = PDFDocument.load(pdfBytes);
-            console.log(pageIndex);
-            // Delete the specified page
-            pdfDoc.removePage(pageIndex);
-
-            // Save the modified PDF
-            const modifiedPdfData = pdfDoc.save();
-            const modifiedPdfDataUri = `data:application/pdf;base64,${Buffer.from(modifiedPdfData).toString('base64')}`;
-            localStorage.setItem('pdfData', modifiedPdfDataUri);
-            setPdfData(modifiedPdfDataUri);
+        if (pdfData) {
+            const pdfBytes = atob(pdfData.split(",")[1]);
+            console.log(pdfBytes);
+            const pdfDoc = await PDFDocument.load(pdfBytes);
+            const pages = pdfDoc.getPages();
+            
+            if (pageIndex > 0 && pageIndex <= pages.length) {
+                pdfDoc.removePage(pageIndex - 1);
+                const modifiedPdfData = await pdfDoc.save();
+                const modifiedPdfDataUri = `data:application/pdf;base64,${Buffer.from(modifiedPdfData).toString('base64')}`;
+                localStorage.setItem('pdfData', modifiedPdfDataUri);
+                setPdfData(modifiedPdfDataUri);
+            } else {
+                console.error("Invalid page index");
+            }
         }
     }
-
 
     return (
         <>
@@ -108,7 +109,7 @@ const DeletePage = () => {
                                     <button 
                                         className="text-[#00cc99] rounded border border-[#00cc99] flex justify-center opacity-30 py-2 px-4 hover:opacity-100 hover:bg-[#00cc99] hover:text-white"
                                     onClick={()=>{
-                                        console.log("hiii")
+                                        handleDeletePage(index + 1);
                                     }}
                                     >
                                         <RiDeleteBin6Line size={23} className="mr-2" />
