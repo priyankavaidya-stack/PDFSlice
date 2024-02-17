@@ -49,17 +49,49 @@ const ShowPdf = ({ pdfFile }) => {
         if (!pdfContent) return;
     
         const pdfDoc = await PDFDocument.load(pdfContent, { ignoreEncryption: true });
-        selectedPages.forEach((pageIndex) => {
-          pdfDoc.removePage(pageIndex);
+    
+        // Sort the selected pages in descending order to avoid index shifting
+        const sortedSelectedPages = [...selectedPages].sort((a, b) => b - a);
+    
+        console.log(sortedSelectedPages);
+        sortedSelectedPages.forEach((page) => {
+            pdfDoc.removePage(page);
         });
     
-        // Get the updated PDF as a Uint8Array
-        const updatedPdfBytes = await pdfDoc.save();
+        const updatedNumPages = pdfDoc.getPageCount();
+        console.log("Updated Number of Pages:", updatedNumPages);
+
+        if (updatedNumPages === 0) {
+            console.error("PDF has zero pages after removal.");
+            return;
+        }
+
+        try {
+            const updatedPdfBytes = await pdfDoc.save();
+            console.log("Updated PDF Bytes:", updatedPdfBytes);
+
+            downloadPdf(updatedPdfBytes);
+        } catch (error) {
+            console.error("Error saving PDF:", error);
+        }
+    }
     
-        // Handle the updated PDF, for example, upload it or display it
-        // For simplicity, let's log the updated PDF as a base64 string
-        const updatedPdfBase64 = btoa(String.fromCharCode.apply(null, new Uint8Array(updatedPdfBytes)));
-        // console.log(updatedPdfBase64);
+    async function downloadPdf(updatedPdfBytes) {
+        // Create a Blob from the PDF content
+        const blob = new Blob([updatedPdfBytes], { type: 'application/pdf' });
+    
+        // Create a download link
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'downloaded_pdf.pdf';
+    
+        // Append the link to the body and trigger the download
+        document.body.appendChild(link);
+        link.click();
+    
+        // Remove the link from the body
+        document.body.removeChild(link);
+
     }
 
   return (
@@ -89,12 +121,12 @@ const ShowPdf = ({ pdfFile }) => {
                                     height={210}
                                     className="shadow-custom"
                                 />
-                                <div className="bg-white absolute bottom-6 w-[140px] h-20 flex justify-center items-center">
+                                {/* <div className="bg-white absolute bottom-6 w-[140px] h-20 flex justify-center items-center">
                                     <button className="text-[#00cc99] rounded border border-[#00cc99] flex justify-center opacity-30 py-2 px-4 hover:opacity-100 hover:bg-[#00cc99] hover:text-white">
                                         <RiDeleteBin6Line size={23} className="mr-2" />
                                         <span>Delete</span>
                                     </button>
-                                </div>
+                                </div> */}
                                 <div className="flex flex-row absolute mt-1.5 w-[130px] justify-center items-center">
                                     <input type="checkbox"
                                         checked={selectedPages.includes(index)} 
@@ -107,7 +139,13 @@ const ShowPdf = ({ pdfFile }) => {
                     })}
                 </Document>
                 <input type="text" value={deleteInput} readOnly />
-                <button onClick={() => deletePages() }>Delete Selected Pages</button>
+                {selectedPages.length > 0 ? (
+                    <button id="delete" onClick={() => deletePages()}>
+                         Delete Selected Pages
+                    </button>  
+                ) : ( 
+                   ""
+                 )}
                 </div>
             ) : (
                 <div>No PDF selected</div>
